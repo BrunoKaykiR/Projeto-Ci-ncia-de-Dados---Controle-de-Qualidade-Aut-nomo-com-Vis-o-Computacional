@@ -73,10 +73,6 @@ A fase de "conversa com os dados" foi realizada via Google Colab e focou em vali
 A organização das pastas facilita a manutenção e o versionamento do projeto:
 * `/docs`: Contém os diagramas de fluxo de dados, imagens dos gráficos da EDA e documentação técnica.
 * `/data/raw`: Armazena os arquivos de dados originais (não modificados).
-* `/data/processed`: Armazena os dados após a execução do script de ETL.
-* `/notebooks`: Contém o notebook Google Colab com a Análise Exploratória de Dados (EDA).
-* `/scripts`: Contém os códigos Python responsáveis pelo tratamento dos dados.
-* `requirements.txt`: Lista todas as bibliotecas necessárias para a execução do projeto.
 
 ---
 
