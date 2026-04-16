@@ -92,8 +92,6 @@ A Inteligência Artificial Generativa (Gemini) foi utilizada sob a premissa de *
   * Auxílio na interpretação técnica do P-valor (0.98), sugerindo a busca por métricas texturais (bordas) em detrimento de métricas globais de cor.
 * **Validação Humana:** A IA não realizou cálculos autônomos definitivos. Todos os *insights* sugeridos foram ativamente codificados no Colab pelo grupo e submetidos à validação da biblioteca `scipy.stats`. Os padrões visuais indicados pelos gráficos foram conferidos um a um mediante amostragem visual direta no dataset original para garantir que as diferenças estatísticas correspondiam à realidade das peças no ambiente de manufatura.
 
-## 10. Comentários sobre a entrega M2
-
 ## 10. Aprofundamentos Estatísticos (Entregas Individuais)
 Como desdobramento da etapa de Análise Exploratória (M2), os membros do grupo aplicaram técnicas de Estatística Inferencial para comprovar matematicamente os padrões visuais encontrados, garantindo que não fossem fruto do acaso. 
 
