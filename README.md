@@ -91,3 +91,14 @@ A Inteligência Artificial Generativa (Gemini) foi utilizada sob a premissa de *
   * Geração de gráficos estatísticos complexos (`seaborn.violinplot` e mapas de calor de diferença absoluta).
   * Auxílio na interpretação técnica do P-valor (0.98), sugerindo a busca por métricas texturais (bordas) em detrimento de métricas globais de cor.
 * **Validação Humana:** A IA não realizou cálculos autônomos definitivos. Todos os *insights* sugeridos foram ativamente codificados no Colab pelo grupo e submetidos à validação da biblioteca `scipy.stats`. Os padrões visuais indicados pelos gráficos foram conferidos um a um mediante amostragem visual direta no dataset original para garantir que as diferenças estatísticas correspondiam à realidade das peças no ambiente de manufatura.
+
+## 10. Comentários sobre a entrega M2
+
+## 10. Aprofundamentos Estatísticos (Entregas Individuais)
+Como desdobramento da etapa de Análise Exploratória (M2), os membros do grupo aplicaram técnicas de Estatística Inferencial para comprovar matematicamente os padrões visuais encontrados, garantindo que não fossem fruto do acaso. 
+
+Cada validação gerou um notebook específico, integrado a este repositório:
+
+* **Validação Estrutural | Rubens Souza (RA: 062210040):** Focou na detecção de quebras no vidro. Após confirmar a normalidade dos dados (Shapiro-Wilk), aplicou o **Teste T de Student** e comprovou que a variável `edge_density` (densidade de bordas) possui diferença estatisticamente significativa ($p < 0,05$) entre peças íntegras e quebradas. O cálculo do Tamanho do Efeito confirmou o alto impacto prático dessa diferença, consolidando esta métrica como a *feature* geométrica principal para a rede neural.
+
+* **Validação de Anomalias Internas | Bruno Kayki (RA: 062210015):** Focou na detecção de sujeira e líquidos estranhos. Devido à alta presença de outliers nessa classe, utilizou o teste não-paramétrico de **Mann-Whitney** para analisar a Variabilidade de Contraste (`contrast`). O teste resultou na rejeição da hipótese nula ($p < 0,05$), provando matematicamente que a contaminação afeta a estabilidade dos pixels. O Tamanho do Efeito validou que filtros de variância local serão cruciais para a IA identificar essas anomalias.
