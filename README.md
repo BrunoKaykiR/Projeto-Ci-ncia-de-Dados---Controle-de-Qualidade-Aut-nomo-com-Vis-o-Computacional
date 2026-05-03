@@ -58,7 +58,7 @@ O pipeline de dados segue as seguintes etapas de processamento:
 ## 6. Análise Exploratória de Dados - EDA (Entrega M2)
 A fase de "conversa com os dados" foi realizada via Google Colab e focou em validar se métricas globais eram suficientes ou se seria necessário o uso de Redes Neurais para a detecção de defeitos.
 
-**🔗 [Acesse o Notebook da EDA no Google Colab Aqui]((https://colab.research.google.com/drive/1uKUpcCgyvqQxBplP7kMnRLN7zjR4lQic?usp=sharing))**
+**🔗 [Acesse o Notebook da EDA no Google Colab Aqui](([https://colab.research.google.com/drive/1uKUpcCgyvqQxBplP7kMnRLN7zjR4lQic?usp=sharing](https://colab.research.google.com/drive/1uKUpcCgyvqQxBplP7kMnRLN7zjR4lQic?usp=sharing)))**
 
 ### 📊 Descobertas e Identificação de Padrões:
 * **O Paradoxo do Brilho ($P=0,98$):** Realizamos um teste de hipótese para verificar se a média de brilho diferenciava as garrafas. O resultado ($P=0,98$) falhou em rejeitar a hipótese nula, provando que o brilho global **não é um indicador viável**.
@@ -106,3 +106,22 @@ Cada validação gerou um notebook específico, integrado a este repositório:
 * **Inviabilidade de Sensores Luminosos | Augusto Bueno(RA: 062210015):** Em uma abordagem de validação de hipótese nula, testou a capacidade da variável brightness (brilho global) de diferenciar peças boas de defeituosas. Utilizando o Teste T, comprovou-se um P-valor altíssimo ($P \approx 0,98$) e um Tamanho de Efeito irrelevante. Esse resultado matemático atesta que sensores fotoelétricos tradicionais não funcionam para este problema de negócio, justificando tecnicamente e financeiramente o desenvolvimento de Redes Neurais Convolucionais baseadas em textura e estrutura espacial.
 
 * **Separabilidade Multiclasse de Anomalias | Gustavo da Paz (RA: 062210032):** Focou na viabilidade do modelo IA em não apenas detectar falhas, mas classificá-las para fins de roteamento na esteira de produção. Avaliou as três classes de falha simultaneamente (broken_large, broken_small, contamination). Utilizando o teste de Kruskal-Wallis (ANOVA Não-Paramétrica), comprovou ($p < 0,05$) que os defeitos possuem assinaturas estruturais distintas entre si. O cálculo do Efeito ($\eta^2$) validou o uso de uma arquitetura de classificação multiclasse (ao invés de um modelo binário) para a etapa M3, agregando alto valor financeiro através da triagem de descarte.
+
+---
+
+## 11. Etapa 03: Desenvolvimento do Modelo de Machine Learning
+
+Nesta etapa, consolidamos os aprendizados da Análise Exploratória (M2) para construir o motor de decisão da esteira de qualidade. Optamos por uma arquitetura de classificação multiclasse capaz de detectar e rotear os 4 tipos de cenários (`good`, `broken_large`, `broken_small`, `contamination`).
+
+### 1. Protótipo e Lógica no Google AI Studio
+Utilizando modelos generativos multimodais de última geração via **Google AI Studio**, implementamos a lógica de software baseada em *Few-Shot Prompting*. O modelo foi instruído com as diretrizes de densidade de bordas e contraste validadas na M2, recebendo exemplos práticos para atuar como um inspetor autônomo.
+* **🔗 [Link do Protótipo no Google AI Studio]([COLE_O_LINK_DO_PASSO_2_AQUI](https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%2210QwM7mLXzwyB5hi4zbEJ9v9HtUP9U6ry%22%5D,%22action%22:%22open%22,%22userId%22:%22113200929059837560470%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing, https://drive.google.com/file/d/1M8I3f_LPf5bZiNfxYITe54uyGyCn_6Ov/view?usp=sharing, https://drive.google.com/file/d/1c3D7j3MQdiurCda-7tK6XXXKmX-P5w-2/view?usp=sharing, https://drive.google.com/file/d/1h6iTt6Qc3Ns5-DFx3UOGzy6gE-xJ9oRa/view?usp=sharing, https://drive.google.com/file/d/1oyY_g0RMZC9w2-WaG_7x4c0AW2H8U78l/view?usp=sharing, https://drive.google.com/file/d/1wQz1Q7nl9H1zau17tfH0N0C4mZnv8h-_/view?usp=sharing))**
+* O código Python gerado pela plataforma encontra-se versionado no repositório no arquivo `app_classificacao.py`.
+
+### 2. Avaliação de Performance (Baseline e Validação)
+Para garantir o rigor estatístico exigido para classificação de imagens industriais, construímos um ambiente de validação técnica das predições:
+* **Foco Inicial (Baseline Clássico):** O uso de Machine Learning clássico (Random Forest) alcançou apenas 44% de Acurácia, provando a necessidade de análise espacial (Deep Learning).
+* **Validação do Modelo Espacial:** A transição para a avaliação de características em matrizes (utilizando Transfer Learning com MobileNetV2) obteve sucesso na separabilidade inicial.
+  * **Acurácia e F1-Score (Macro):** 54% (na primeira iteração com baixo volume de dados).
+  * **Matriz de Confusão:** O *Recall* da classe `good` subiu drasticamente, reduzindo o descarte indevido (falsos positivos). A IA demonstrou capacidade de detecção da classe crítica `contamination`, cujo F1-Score anterior era nulo e subiu para 0.55.
+* **Próximos Passos (Etapa 04):** As métricas apontam que a arquitetura está correta, porém sofre de *underfitting* pela escassez de dados. Aplicaremos técnicas de *Data Augmentation* na próxima fase para elevar o F1-Score a níveis de produção (>90%).
