@@ -111,7 +111,7 @@ A organização das pastas facilita a manutenção e o versionamento do projeto:
 ├── requirements.txt    # Dependências mapeadas
 └── README.md           # Documentação principal
 
-##🚀 10. Instruções para ExecuçãoPara reproduzir o ambiente de dados, executar o pipeline e iniciar o Dashboard:Clone este repositório.Instale as dependências através do comando:Bashpip install -r requirements.txt
+## 🚀 10. Instruções para ExecuçãoPara reproduzir o ambiente de dados, executar o pipeline e iniciar o Dashboard:Clone este repositório.Instale as dependências através do comando:Bashpip install -r requirements.txt
 Para iniciar o painel de monitoramento, execute:Bashstreamlit run scripts/dashboard.py
 
 ---
