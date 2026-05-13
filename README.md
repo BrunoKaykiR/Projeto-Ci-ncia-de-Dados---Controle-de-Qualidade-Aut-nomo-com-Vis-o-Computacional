@@ -137,5 +137,13 @@ Para iniciar o painel de monitoramento, execute:Bashstreamlit run scripts/dashbo
 ---
 ## Separabilidade Multiclasse de Anomalias | Gustavo da Paz (RA: 062210032): Focou na viabilidade do modelo IA em não apenas detectar falhas, mas classificá-las para fins de roteamento na esteira de produção. Avaliou as três classes de falha simultaneamente. Utilizando o teste de Kruskal-Wallis (ANOVA Não-Paramétrica), comprovou ($p < 0,05$) que os defeitos possuem assinaturas estruturais distintas entre si. O cálculo do Efeito ($\eta^2$) validou o uso de uma arquitetura de classificação multiclasse (ao invés de um modelo binário).
 
+## 📸 12. Galeria da Solução (Dashboard)
+Abaixo, apresentamos as capturas de tela do Painel Streamlit desenvolvido para monitoramento e simulação da esteira:
 
-## 12. Apêndice de IA (Transparência)A Inteligência Artificial Generativa (Gemini) foi utilizada sob a premissa de pair-programming e co-criação durante todo o ciclo de desenvolvimento (M2 a M4). Aplicações:Estruturação e debug de scripts Python para ETL utilizando opencv-python e pandas.Geração de gráficos estatísticos complexos (seaborn.violinplot e mapas de calor de diferença absoluta). Auxílio na interpretação técnica do P-valor (0.98), sugerindo a busca por métricas texturais (bordas) em detrimento de métricas globais de cor.Estruturação do Front-end em Streamlit para o Dashboard. Validação Humana: A IA não realizou cálculos autônomos definitivos. Todos os insights sugeridos foram ativamente codificados no Colab pelo grupo e submetidos à validação da biblioteca scipy.stats. Os padrões visuais indicados pelos gráficos foram conferidos um a um mediante amostragem visual direta no dataset original para garantir rigor científico e industrial.
+Painel de Performance e Gráfico de Distribuição
+Simulador de Inferência em Tempo Real
+
+<img width="1861" height="909" alt="image" src="https://github.com/user-attachments/assets/8bb30e7c-c840-4039-ae46-bf4231e99d30" />
+
+
+## 13. Apêndice de IA (Transparência)A Inteligência Artificial Generativa (Gemini) foi utilizada sob a premissa de pair-programming e co-criação durante todo o ciclo de desenvolvimento (M2 a M4). Aplicações:Estruturação e debug de scripts Python para ETL utilizando opencv-python e pandas.Geração de gráficos estatísticos complexos (seaborn.violinplot e mapas de calor de diferença absoluta). Auxílio na interpretação técnica do P-valor (0.98), sugerindo a busca por métricas texturais (bordas) em detrimento de métricas globais de cor.Estruturação do Front-end em Streamlit para o Dashboard. Validação Humana: A IA não realizou cálculos autônomos definitivos. Todos os insights sugeridos foram ativamente codificados no Colab pelo grupo e submetidos à validação da biblioteca scipy.stats. Os padrões visuais indicados pelos gráficos foram conferidos um a um mediante amostragem visual direta no dataset original para garantir rigor científico e industrial.
