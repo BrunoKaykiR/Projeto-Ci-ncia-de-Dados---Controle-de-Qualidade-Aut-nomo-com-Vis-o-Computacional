@@ -57,7 +57,7 @@ O pipeline de dados segue as seguintes etapas de processamento:
    * **Redimensionamento:** Conversão de 900x900 para 224x224 pixels para otimizar o uso de memória (RAM/GPU).
    * **Normalização:** Conversão da escala de cores de inteiros (0-255) para ponto flutuante (0.0-1.0), essencial para a estabilidade matemática das redes neurais.
    * **Filtragem Bi-dimensional:** Aplicação de filtros para redução de ruído de compressão e realce de bordas onde rachaduras são mais prováveis de ocorrer.
-   * **Data Augmentation:** Geração sintética de variações (brilho e rotação leve) para aumentar a robustez do modelo espacial.
+   * **Data Augmentation:** Geração sintética de variações para aumentar a robustez do modelo espacial sem descaracterizar o alinhamento da esteira.
 3. **Carga:** Os dados tratados e os tensores gerados são disponibilizados na pasta `/data/processed` ou em objetos de memória (DataLoaders) prontos para consumo dos modelos de Machine Learning.
 
 ---
@@ -68,38 +68,34 @@ A fase de "conversa com os dados" foi realizada via Google Colab e focou em vali
 **🔗 [Acesse o Notebook da EDA no Google Colab Aqui](https://colab.research.google.com/drive/1uKUpcCgyvqQxBplP7kMnRLN7zjR4lQic?usp=sharing)**
 
 ### Descobertas e Identificação de Padrões:
-* **O Paradoxo do Brilho ($P=0,98$):** Realizamos um teste de hipótese para verificar se a média de brilho diferenciava as garrafas. O resultado ($P=0,98$) falhou em rejeitar a hipótese nula, provando que o brilho global **não é um indicador viável**.
+* **O Paradoxo do Brilho ($P \approx 0,98$):** Realizamos um teste de hipótese para verificar se a média de brilho diferenciava as garrafas. O resultado ($P=0,98$) falhou em rejeitar a hipótese nula, provando que o brilho global **não é um indicador viável**.
 * **Diferenciação Estrutural (Canny Edge):** O uso de filtros de borda revelou que garrafas íntegras possuem uma densidade de borda mais estável e superior, enquanto quebras grandes (`broken_large`) destroem a silhueta contínua do vidro, permitindo separação estatística.
 * **Detecção de Outliers e Dispersão:** O gráfico de violino comprovou que a classe `contamination` possui instabilidade extrema e outliers severos, indicando que agentes externos afetam o desvio padrão dos pixels.
-* **Mapas de Calor:** A subtração de imagens validou a localização espacial das quebras nas áreas de maior estresse (fundo e gargalo).
 * **Validação de Hipótese:** Como as variáveis globais falharam e as variáveis locais (textura/borda) demonstraram separabilidade, **justifica-se tecnicamente o avanço para modelos de Deep Learning (CNNs)**.
 
 ---
 
-## 📈 7. Desenvolvimento do Modelo de Machine Learning (Etapa 03)
-Nesta etapa, consolidamos os aprendizados da Análise Exploratória para construir o motor de decisão da esteira de qualidade. Optamos por uma arquitetura de classificação multiclasse capaz de detectar e rotear os 4 tipos de cenários (`good`, `broken_large`, `broken_small`, `contamination`).
+## 📈 7. Desenvolvimento do Modelo de Machine Learning (Etapa 03 e M4)
+Nesta etapa, consolidamos os aprendizados para construir o motor de decisão da esteira de qualidade utilizando a arquitetura MobileNetV2 (Transfer Learning).
 
-### Protótipo e Lógica no Google AI Studio
-Utilizando modelos generativos multimodais de última geração via **Google AI Studio**, implementamos a lógica de software baseada em *Few-Shot Prompting*. O modelo foi instruído com as diretrizes de densidade de bordas e contraste validadas na M2.
-* 🔗 **[Acessar Protótipo no Google AI Studio](https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%2210QwM7mLXzwyB5hi4zbEJ9v9HtUP9U6ry%22%5D,%22action%22:%22open%22,%22userId%22:%22113200929059837560470%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing)**
-* *(O código Python gerado pela plataforma encontra-se versionado na pasta `/scripts` no arquivo `app_classificacao.py`)*.
-
-### Avaliação de Performance (Baseline e Validação)
-* **Foco Inicial (Baseline Clássico):** O uso de Machine Learning clássico (Random Forest) alcançou apenas 44% de Acurácia, provando a necessidade de análise espacial.
-* **Validação do Modelo Espacial:** A transição para a avaliação de características em matrizes (Transfer Learning com MobileNetV2) obteve sucesso na separabilidade multiclasse. A capacidade de detecção da classe crítica `contamination` subiu drasticamente, garantindo um direcionamento preciso para triagem na esteira.
+### Avaliação de Performance e Validação Cruzada (Etapa M4)
+Para atender aos rigorosos requisitos de validação, implementamos a técnica de *Early Stopping* durante o treinamento da rede neural. O objetivo foi impedir a memorização de dados (*Overfitting*).
+* **O Diagnóstico Final:** Com a validação estrita, o modelo estabilizou sua acurácia real em **29%**, com um Recall de peças boas em **25%** e F1-Score de Contaminação em **0.18**.
+* **Justificativa Técnica:** Esses números comprovam matematicamente a tese levantada pelo grupo na M2. O dataset MVTec AD possui um volume amostral extremamente baixo (24 imagens de validação) para o treinamento de redes profundas. A compressão espacial dos tensores gera perda de nitidez espacial (impedindo a IA de ver micro-sujeiras) e causa forte *Underfitting*. O modelo torna-se "paranoico", preferindo descartar garrafas boas (Falsos Positivos) a liberar defeitos. O avanço prático para a linha de produção exigiria uma coleta massiva de dados reais direto da esteira.
 
 ---
 
 ## 🖥️ 8. Dashboard de Monitoramento e Inferência (Etapa 04)
-Para atender à necessidade de uma interface visual aplicável ao chão de fábrica, desenvolvemos um painel interativo em **Streamlit**:
-- **Funcionalidades:** Monitoramento ao vivo das métricas (Acurácia, F1-Score, Recall), distribuição gráfica de probabilidade de falhas e um **Simulador de Inferência**.
-- **Edge Computing Simulado:** O operador pode realizar o upload de uma imagem da esteira e receber o diagnóstico instantâneo da IA, visualizando a decisão de roteamento (Aprovação, Lavagem ou Triturador) diretamente na tela.
+Para atender à necessidade de uma interface visual aplicável ao chão de fábrica, desenvolvemos um painel interativo em **Streamlit**. Ele atua como um **Mockup Funcional (Simulador)** da operação na esteira.
+- **Funcionalidades Mapeadas:** Exibição das métricas reais estabilizadas no treinamento final, distribuição do histórico de anomalias e um Simulador de Inferência.
+- **Lógica de Interface:** O operador realiza o upload da imagem e o painel simula a decisão da Inteligência Artificial (roteamento para liberação, lavagem ou descarte). O código executável que gera essa interface encontra-se na pasta `/scripts/dashboard.py`.
 
 ---
 
 ## 🧱 9. Estrutura do Repositório
 A organização das pastas facilita a manutenção e o versionamento do projeto:
 
+```bash
 /
 ├── data/               
 │   ├── raw/            # Arquivos de dados originais (não modificados)
